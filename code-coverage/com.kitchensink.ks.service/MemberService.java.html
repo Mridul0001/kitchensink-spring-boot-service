@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MemberService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Kitchensink</a> &gt; <a href="index.source.html" class="el_package">com.kitchensink.ks.service</a> &gt; <span class="el_source">MemberService.java</span></div><h1>MemberService.java</h1><pre class="source lang-java linenums">package com.kitchensink.ks.service;
+
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.kitchensink.ks.data.documents.MemberDocument;
+import com.kitchensink.ks.data.repository.MemberRepository;
+import com.kitchensink.ks.dto.Member;
+import com.kitchensink.ks.exceptions.DuplicateMemberException;
+import com.kitchensink.ks.exceptions.MemberException;
+import com.kitchensink.ks.exceptions.MemberNotFoundException;
+import com.kitchensink.ks.exceptions.MissingIdException;
+import org.apache.logging.log4j.util.Strings;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+public class MemberService {
+<span class="fc" id="L21">    private final ObjectMapper MAPPER = new ObjectMapper();</span>
+    private final MemberRepository memberRepository;
+
+    @Autowired
+<span class="fc" id="L25">    public MemberService(MemberRepository memberRepository) {</span>
+<span class="fc" id="L26">        this.memberRepository = memberRepository;</span>
+<span class="fc" id="L27">    }</span>
+
+    public List&lt;Member&gt; getMembers() {
+<span class="fc" id="L30">        List&lt;MemberDocument&gt; members = memberRepository.findAll();</span>
+<span class="fc" id="L31">        return MAPPER.convertValue(members, new TypeReference&lt;List&lt;Member&gt;&gt;() {});</span>
+    }
+
+    /**
+     *
+     * @param id id of the member to fetch
+     * @return Member object matching the given id
+     * @throws MemberNotFoundException if member with the given id doesn't exist
+     */
+    public Member getMemberById(String id) throws MemberNotFoundException {
+<span class="fc" id="L41">        MemberDocument memberDocument = memberRepository.findById(id).orElseThrow(MemberNotFoundException::new);</span>
+<span class="fc" id="L42">        return MAPPER.convertValue(memberDocument, Member.class);</span>
+    }
+
+    public void deleteMemberById(String id){
+<span class="fc" id="L46">        memberRepository.deleteById(id);</span>
+<span class="fc" id="L47">    }</span>
+
+    /**
+     * Add new member into database
+     * @param member Member object to insert into DB
+     * @return Member object with newly created id
+     * @throws DuplicateMemberException if a member already exists
+     */
+    public Member createMember(Member member) throws DuplicateMemberException {
+        try {
+<span class="fc" id="L57">            MemberDocument memberDocument = MAPPER.convertValue(member, MemberDocument.class);</span>
+<span class="fc" id="L58">            memberDocument = memberRepository.insert(memberDocument);</span>
+<span class="fc" id="L59">            return MAPPER.convertValue(memberDocument, Member.class);</span>
+<span class="fc" id="L60">        }catch (DuplicateKeyException e){</span>
+<span class="fc" id="L61">            throw new DuplicateMemberException();</span>
+        }
+    }
+
+    /**
+     * Update an existing member
+     * @param member Member object to update in DB
+     * @return Updated member object
+     * @throws MemberException if id is not present in request or duplicate key is found
+     */
+    public Member updateMember(Member member) throws MemberException {
+        try {
+            //id is mandatory. Throw MissingIdException if not present
+<span class="fc bfc" id="L74" title="All 2 branches covered.">            if(Strings.isBlank(member.getId())) throw new MissingIdException();</span>
+<span class="fc" id="L75">            MemberDocument memberDocument = MAPPER.convertValue(member, MemberDocument.class);</span>
+<span class="fc" id="L76">            memberDocument = memberRepository.save(memberDocument);</span>
+<span class="fc" id="L77">            return MAPPER.convertValue(memberDocument, Member.class);</span>
+<span class="fc" id="L78">        }catch (DuplicateKeyException e){</span>
+<span class="fc" id="L79">            throw new DuplicateMemberException();</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

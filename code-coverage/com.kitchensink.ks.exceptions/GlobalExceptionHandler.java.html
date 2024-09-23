@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GlobalExceptionHandler.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Kitchensink</a> &gt; <a href="index.source.html" class="el_package">com.kitchensink.ks.exceptions</a> &gt; <span class="el_source">GlobalExceptionHandler.java</span></div><h1>GlobalExceptionHandler.java</h1><pre class="source lang-java linenums">package com.kitchensink.ks.exceptions;
+
+import com.kitchensink.ks.dto.Response;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.security.SignatureException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.AccountStatusException;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+
+/**
+ * Global Exception handler to handle all exceptions like security, CRUD, Internal server errors etc.
+ */
+@ControllerAdvice
+<span class="fc" id="L18">public class GlobalExceptionHandler {</span>
+
+    @ExceptionHandler({BadCredentialsException.class, AccountStatusException.class, AccessDeniedException.class, SignatureException.class, ExpiredJwtException.class})
+    public ResponseEntity&lt;Response&gt; handleAuthExceptions(Exception e) {
+<span class="fc" id="L22">        Response response = new Response();</span>
+<span class="fc bfc" id="L23" title="All 2 branches covered.">        if (e instanceof BadCredentialsException) {</span>
+<span class="fc" id="L24">            response.setErrorMessage(&quot;The username or password is incorrect&quot;);</span>
+        }
+<span class="fc bfc" id="L26" title="All 2 branches covered.">        if (e instanceof AccountStatusException) {</span>
+<span class="fc" id="L27">            response.setErrorMessage(&quot;The account is locked&quot;);</span>
+        }
+<span class="fc bfc" id="L29" title="All 2 branches covered.">        if (e instanceof AccessDeniedException) {</span>
+<span class="fc" id="L30">            response.setErrorMessage(&quot;You don't have permission to access this resource&quot;);</span>
+        }
+<span class="fc bfc" id="L32" title="All 2 branches covered.">        if (e instanceof ExpiredJwtException) {</span>
+<span class="fc" id="L33">            response.setErrorMessage(&quot;The token has expired&quot;);</span>
+        }
+<span class="fc bfc" id="L35" title="All 2 branches covered.">        if(e instanceof SignatureException) {</span>
+<span class="fc" id="L36">            response.setErrorMessage(&quot;The JWT signature is invalid&quot;);</span>
+        }
+<span class="fc" id="L38">        return new ResponseEntity&lt;&gt;(response, HttpStatus.FORBIDDEN);</span>
+    }
+
+    @ExceptionHandler(MemberException.class)
+    public ResponseEntity&lt;Response&gt; handleMemberException(MemberException e) {
+<span class="fc" id="L43">        Response response = new Response();</span>
+<span class="fc" id="L44">        HttpStatus status = HttpStatus.BAD_REQUEST;</span>
+<span class="fc bfc" id="L45" title="All 2 branches covered.">        if(e instanceof MemberNotFoundException) {</span>
+<span class="fc" id="L46">            response.setErrorMessage(e.getMessage());</span>
+<span class="fc" id="L47">            status = HttpStatus.NOT_FOUND;</span>
+<span class="fc bfc" id="L48" title="All 2 branches covered.">        }else if(e instanceof DuplicateMemberException){</span>
+<span class="fc" id="L49">            response.setErrorMessage(e.getMessage());</span>
+<span class="fc" id="L50">            status = HttpStatus.CONFLICT;</span>
+        }
+
+<span class="fc" id="L53">        response.setErrorMessage(e.getMessage());</span>
+<span class="fc" id="L54">        return new ResponseEntity&lt;&gt;(response, status);</span>
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity&lt;Response&gt; handleException(Exception e) {
+<span class="fc" id="L59">        return getDefaultExceptionResponse();</span>
+    }
+
+    private ResponseEntity&lt;Response&gt; getDefaultExceptionResponse(){
+<span class="fc" id="L63">        Response response = new Response();</span>
+<span class="fc" id="L64">        response.setErrorMessage(&quot;Something went wrong&quot;);</span>
+<span class="fc" id="L65">        return new ResponseEntity&lt;&gt;(response, HttpStatus.INTERNAL_SERVER_ERROR);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

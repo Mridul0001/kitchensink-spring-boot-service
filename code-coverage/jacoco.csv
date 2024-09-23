@@ -1,0 +1,25 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+Kitchensink,com.kitchensink.ks.dto,Member,0,3,0,0,0,1,0,1,0,1
+Kitchensink,com.kitchensink.ks.dto,Response,0,3,0,0,0,1,0,1,0,1
+Kitchensink,com.kitchensink.ks.dto,LoginRequest,0,3,0,0,0,1,0,1,0,1
+Kitchensink,com.kitchensink.ks.dto,LoginResponse,0,3,0,0,0,1,0,1,0,1
+Kitchensink,com.kitchensink.ks.exceptions,DuplicateMemberException,0,4,0,0,0,2,0,1,0,1
+Kitchensink,com.kitchensink.ks.exceptions,GlobalExceptionHandler,0,94,0,14,0,27,0,12,0,5
+Kitchensink,com.kitchensink.ks.exceptions,MemberException,0,4,0,0,0,2,0,1,0,1
+Kitchensink,com.kitchensink.ks.exceptions,MemberNotFoundException,0,4,0,0,0,2,0,1,0,1
+Kitchensink,com.kitchensink.ks.exceptions,MissingIdException,0,4,0,0,0,2,0,1,0,1
+Kitchensink,com.kitchensink.ks.controller,UserController.new LoginResponse() {...},0,19,0,0,0,4,0,1,0,1
+Kitchensink,com.kitchensink.ks.controller,UserController,0,32,0,0,0,9,0,3,0,3
+Kitchensink,com.kitchensink.ks.controller,MemberController,0,42,0,0,0,9,0,6,0,6
+Kitchensink,com.kitchensink.ks.utils,JWTAuthenticationFilter,0,88,0,10,0,24,0,7,0,2
+Kitchensink,com.kitchensink.ks,KitchensinkApplication,0,3,0,0,0,1,0,1,0,1
+Kitchensink,com.kitchensink.ks.data.documents,MemberDocument,0,3,0,0,0,1,0,1,0,1
+Kitchensink,com.kitchensink.ks.data.documents,UserDocument.new ArrayList() {...},0,16,0,0,0,3,0,1,0,1
+Kitchensink,com.kitchensink.ks.data.documents,UserDocument,0,8,0,0,0,2,0,2,0,2
+Kitchensink,com.kitchensink.ks.service,AuthenticationService,0,35,0,0,0,10,0,3,0,3
+Kitchensink,com.kitchensink.ks.service,JwtService,0,102,0,0,0,29,0,10,0,10
+Kitchensink,com.kitchensink.ks.service,MemberService.new TypeReference() {...},0,3,0,0,0,1,0,1,0,1
+Kitchensink,com.kitchensink.ks.service,MemberService,0,103,0,2,0,21,0,7,0,6
+Kitchensink,com.kitchensink.ks.configurations,ApplicationConfig,0,43,0,0,0,11,0,7,0,7
+Kitchensink,com.kitchensink.ks.configurations,SecurityConfig,0,83,0,0,0,19,0,6,0,6
+Kitchensink,com.kitchensink.ks.configurations,MongoConfig,0,54,0,0,0,9,0,3,0,3
