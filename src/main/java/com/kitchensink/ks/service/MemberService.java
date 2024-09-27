@@ -58,7 +58,7 @@ public class MemberService {
             memberDocument = memberRepository.insert(memberDocument);
             return MAPPER.convertValue(memberDocument, Member.class);
         }catch (DuplicateKeyException e){
-            throw new DuplicateMemberException();
+            throw new DuplicateMemberException(e.getMessage().contains("email")?"Email already in use":"Phone already in use");
         }
     }
 
@@ -76,7 +76,7 @@ public class MemberService {
             memberDocument = memberRepository.save(memberDocument);
             return MAPPER.convertValue(memberDocument, Member.class);
         }catch (DuplicateKeyException e){
-            throw new DuplicateMemberException();
+            throw new DuplicateMemberException(e.getMessage().contains("email")?"Email already in use":"Phone already in use");
         }
     }
 }

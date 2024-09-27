@@ -109,7 +109,20 @@ class MemberServiceTests {
             setEmail("john.doe@example.com");
             setPhoneNumber("1234567890");
         }};
-        when(memberRepository.insert(any(MemberDocument.class))).thenThrow(new DuplicateKeyException("Duplicate key"));
+        when(memberRepository.insert(any(MemberDocument.class))).thenThrow(new DuplicateKeyException("Duplicate email"));
+
+        assertThrows(DuplicateMemberException.class, () -> memberService.createMember(member));
+    }
+
+    @Test
+    void testCreateMember_DuplicatePhoneNumber() {
+        Member member = new Member(){{
+            setId("1");
+            setName("John Doe");
+            setEmail("john.doe@example.com");
+            setPhoneNumber("1234567890");
+        }};
+        when(memberRepository.insert(any(MemberDocument.class))).thenThrow(new DuplicateKeyException("Duplicate Phone number"));
 
         assertThrows(DuplicateMemberException.class, () -> memberService.createMember(member));
     }
@@ -136,14 +149,27 @@ class MemberServiceTests {
     }
 
     @Test
-    void testUpdateMember_NotFound() {
+    void testUpdateMember_DuplicateEmail() {
         Member member = new Member(){{
             setId("1");
             setName("John Doe");
             setEmail("john.doe@example.com");
             setPhoneNumber("1234567890");
         }};
-        when(memberRepository.save(any(MemberDocument.class))).thenThrow(new DuplicateKeyException("Duplicate key"));
+        when(memberRepository.save(any(MemberDocument.class))).thenThrow(new DuplicateKeyException("Duplicate email"));
+
+        assertThrows(DuplicateMemberException.class, () -> memberService.updateMember(member));
+    }
+
+    @Test
+    void testUpdateMember_DuplicatePhoneNumber() {
+        Member member = new Member(){{
+            setId("1");
+            setName("John Doe");
+            setEmail("john.doe@example.com");
+            setPhoneNumber("1234567890");
+        }};
+        when(memberRepository.save(any(MemberDocument.class))).thenThrow(new DuplicateKeyException("Duplicate Phone Number"));
 
         assertThrows(DuplicateMemberException.class, () -> memberService.updateMember(member));
     }

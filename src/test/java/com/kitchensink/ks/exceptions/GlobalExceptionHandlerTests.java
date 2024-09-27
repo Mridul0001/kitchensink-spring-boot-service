@@ -88,7 +88,7 @@ public class GlobalExceptionHandlerTests {
 
     @Test
     public void testHandleDuplicateMemberException() {
-        DuplicateMemberException exception = new DuplicateMemberException();
+        DuplicateMemberException exception = new DuplicateMemberException("Another member exists with this email");
 
         ResponseEntity<Response> responseEntity = globalExceptionHandler.handleMemberException(exception);
 
